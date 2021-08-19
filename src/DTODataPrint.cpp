@@ -50,6 +50,10 @@ void DTODataPrint::SetFooterValue(std::string strKey, std::string strValue) {
   m_mFooterValue[strKey] = strValue;
 }
 
+void DTODataPrint::SetLoadingBar(std::string strKey, unsigned int uiValue) {
+  m_mListLoadingBar[strKey] = uiValue;
+}
+
 std::map<std::string, std::string> DTODataPrint::GetHeaderValue() {
   return m_mHeaderValue;
 }
@@ -66,6 +70,10 @@ std::map<std::string, std::string> DTODataPrint::GetFooterValue() {
   return m_mFooterValue;
 }
 
+std::map<std::string, unsigned int> DTODataPrint::GetLoadingBar() {
+  return m_mListLoadingBar;
+}
+
 void DTODataPrint::ClearHeaderValue() { m_mHeaderValue.clear(); }
 
 void DTODataPrint::ClearArticleValue() { m_mArticleValue.clear(); }
@@ -73,3 +81,5 @@ void DTODataPrint::ClearArticleValue() { m_mArticleValue.clear(); }
 void DTODataPrint::CleartNavValue() { m_mNavValue.clear(); }
 
 void DTODataPrint::ClearFooterValue() { m_mFooterValue.clear(); }
+
+void DTODataPrint::ClearLoadingBar() { m_mListLoadingBar.clear(); }

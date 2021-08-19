@@ -11,14 +11,17 @@
 #ifndef HEADER_INTERFACECMD_H_
 #define HEADER_INTERFACECMD_H_
 
+#include <math.h>
+
 #include <chrono>
 #include <functional>
 #include <future>
 #include <iostream>
-#include <sstream>
 #include <mutex>
+#include <sstream>
 #include <string>
 #include <thread>
+#include <vector>
 
 #include "DTODataPrint.h"
 
@@ -32,7 +35,7 @@ class InterfaceCmd {
   bool m_bScanKeyboard;
 
   unsigned int m_uiWidthMax;
-  unsigned int m_uiWidthNavMax;
+  unsigned int m_uiBbrNav;
 
   std::string m_strEcran;
 
@@ -41,13 +44,22 @@ class InterfaceCmd {
   std::vector<std::string> m_vNav;
   std::vector<std::string> m_vFooter;
 
+  std::string m_strKeyStop;
+  std::string m_strKeyValueStart;
+  std::string m_strKeyValueStop;
+
+  bool m_bLoadingBarActivate;
+
   bool SafeGetValueScanKeyboard();
 
   void InsertValueInMsg();
 
   void PrintHeader();
-  void PrintArticleNav();
+  void PrintNav();
+  void PrintArticle();
   void PrintFooter();
+  void PrintSeparator();
+  void PrintLoadingBar();
 
  public:
   InterfaceCmd();
@@ -65,7 +77,12 @@ class InterfaceCmd {
   void setScanKeyboard(bool bScan);
 
   void setWidthMax(unsigned int uiWidthMax);
-  void setWidthNavMax(unsigned int uiWidthMax);
+  void setBbrNav(unsigned int uiBbrNav);
+
+  void setKeyStop(std::string strKeyStop);
+  void setKeyValueStart(std::string strKeyValueStart);
+  void setKeyValueStop(std::string strKeyValueStop);
+  void setLoadingBarActivate(bool bLoadingBarActivate);
 };
 
 #endif  // HEADER_INTERFACECMD_H_

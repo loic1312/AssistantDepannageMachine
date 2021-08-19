@@ -7,12 +7,20 @@ InterfaceCmd::~InterfaceCmd() {}
 void InterfaceCmd::PrintScreen(DTODataPrint DataPrint) {
   m_DataPrint = DataPrint;
   std::lock_guard<std::mutex> lock(m_mtxDisplay);
-  std::system("clear");
   m_strEcran.clear();
   InsertValueInMsg();
   PrintHeader();
-  PrintArticleNav();
+  PrintSeparator();
+  PrintNav();
+  PrintSeparator();
+  PrintArticle();
+  if (m_bLoadingBarActivate) {
+    PrintLoadingBar();
+  }
+  PrintSeparator();
   PrintFooter();
+  PrintSeparator();
+  std::system("clear");
   std::cout << m_strEcran << std::endl;
 }
 
@@ -30,7 +38,7 @@ void InterfaceCmd::KeyboardInput() {
     if (future.wait_for(span) == std::future_status::ready) {
       std::string data = future.get();
       m_callbackKeyboardInput(data);
-      if (data == "STOP") {
+      if (data == m_strKeyStop) {
         setScanKeyboard(false);
       } else {
         future =
@@ -60,8 +68,22 @@ void InterfaceCmd::setWidthMax(unsigned int uiWidthMax) {
   m_uiWidthMax = uiWidthMax;
 }
 
-void InterfaceCmd::setWidthNavMax(unsigned int uiWidthMax) {
-  m_uiWidthNavMax = uiWidthMax;
+void InterfaceCmd::setBbrNav(unsigned int uiBbrNav) { m_uiBbrNav = uiBbrNav; }
+
+void InterfaceCmd::setKeyStop(std::string strKeyStop) {
+  m_strKeyStop = strKeyStop;
+}
+
+void InterfaceCmd::setKeyValueStart(std::string strKeyValueStart) {
+  m_strKeyValueStart = strKeyValueStart;
+}
+
+void InterfaceCmd::setKeyValueStop(std::string strKeyValueStop) {
+  m_strKeyValueStop = strKeyValueStop;
+}
+
+void InterfaceCmd::setLoadingBarActivate(bool bLoadingBarActivate) {
+  m_bLoadingBarActivate = bLoadingBarActivate;
 }
 
 bool InterfaceCmd::SafeGetValueScanKeyboard() {
@@ -76,12 +98,46 @@ void InterfaceCmd::InsertValueInMsg() {
   m_vFooter = m_DataPrint.GetFooter();
   for (std::vector<std::string>::iterator it = m_vHeader.begin();
        it != m_vHeader.end(); ++it) {
-    while (it->find("<!") != std::string::npos) {
-      std::size_t firstFound = it->find_first_of("<!");
-      std::size_t lastFound = it->find_first_of("!>");
-      std::string keyValue = it->substr(firstFound + 2, lastFound - 2);
-      it->replace(firstFound, lastFound - firstFound,
+    while (it->find(m_strKeyValueStart) != std::string::npos) {
+      std::size_t firstFound = it->find(m_strKeyValueStart);
+      std::size_t lastFound = it->find(m_strKeyValueStop);
+      std::string keyValue =
+          it->substr(firstFound + 2, lastFound - firstFound - 2);
+      it->replace(firstFound, lastFound - firstFound + 2,
                   m_DataPrint.GetHeaderValue()[keyValue]);
+    }
+  }
+  for (std::vector<std::string>::iterator it = m_vArticle.begin();
+       it != m_vArticle.end(); ++it) {
+    while (it->find(m_strKeyValueStart) != std::string::npos) {
+      std::size_t firstFound = it->find(m_strKeyValueStart);
+      std::size_t lastFound = it->find(m_strKeyValueStop);
+      std::string keyValue =
+          it->substr(firstFound + 2, lastFound - firstFound - 2);
+      it->replace(firstFound, lastFound - firstFound + 2,
+                  m_DataPrint.GetArticleValue()[keyValue]);
+    }
+  }
+  for (std::vector<std::string>::iterator it = m_vNav.begin();
+       it != m_vNav.end(); ++it) {
+    while (it->find(m_strKeyValueStart) != std::string::npos) {
+      std::size_t firstFound = it->find(m_strKeyValueStart);
+      std::size_t lastFound = it->find(m_strKeyValueStop);
+      std::string keyValue =
+          it->substr(firstFound + 2, lastFound - firstFound - 2);
+      it->replace(firstFound, lastFound - firstFound + 2,
+                  m_DataPrint.GetNavValue()[keyValue]);
+    }
+  }
+  for (std::vector<std::string>::iterator it = m_vFooter.begin();
+       it != m_vFooter.end(); ++it) {
+    while (it->find(m_strKeyValueStart) != std::string::npos) {
+      std::size_t firstFound = it->find(m_strKeyValueStart);
+      std::size_t lastFound = it->find(m_strKeyValueStop);
+      std::string keyValue =
+          it->substr(firstFound + 2, lastFound - firstFound - 2);
+      it->replace(firstFound, lastFound - firstFound + 2,
+                  m_DataPrint.GetFooterValue()[keyValue]);
     }
   }
 }
@@ -93,50 +149,108 @@ void InterfaceCmd::PrintHeader() {
       m_strEcran.append(*it);
       m_strEcran.append("\n\r");
     } else {
+      unsigned int uiIndexStr = 0;
+      while (uiIndexStr < it->size()) {
+        m_strEcran.append(it->substr(uiIndexStr, m_uiWidthMax));
+        uiIndexStr = uiIndexStr + m_uiWidthMax;
+        m_strEcran.append("\n\r");
+      }
+    }
+  }
+}
+
+void InterfaceCmd::PrintNav() {
+  unsigned int uiLengthMaxNav = floor(m_uiWidthMax / m_uiBbrNav) - 1;
+  unsigned int uiCounterNav = 0;
+  for (std::vector<std::string>::iterator it = m_vNav.begin();
+       it != m_vNav.end(); ++it) {
+    if (uiCounterNav >= m_uiBbrNav) {
+      m_strEcran.append("\n\r");
+      uiCounterNav = 0;
+    }
+    unsigned int uiLengthNav = it->size();
+    if (uiLengthNav < uiLengthMaxNav) {
       m_strEcran.append(*it);
+      for (unsigned int i = 0; i < (uiLengthMaxNav - uiLengthNav); ++i) {
+        m_strEcran.append(" ");
+      }
+    } else {
+      std::string strSubNav = it->substr(0, uiLengthMaxNav);
+      m_strEcran.append(strSubNav);
+    }
+    m_strEcran.append("|");
+    uiCounterNav += 1;
+    if (it == m_vNav.end() - 1) {
       m_strEcran.append("\n\r");
     }
   }
 }
 
-void InterfaceCmd::PrintArticleNav() {
-  unsigned int uiIndexMaxNav = m_vNav.size();
-  unsigned int uiIndexMaxArticle = m_vArticle.size();
-  unsigned int uiIndex = 0;
-  unsigned int uiIndexMax;
-  unsigned int uiMaxLengthNav = 0;
-  if (uiIndexMaxNav < uiIndexMaxArticle) {
-    uiIndexMax = uiIndexMaxArticle;
-  } else {
-    uiIndexMax = uiIndexMaxNav;
+void InterfaceCmd::PrintArticle() {
+  for (std::vector<std::string>::iterator it = m_vArticle.begin();
+       it != m_vArticle.end(); ++it) {
+    if (it->size() < m_uiWidthMax) {
+      m_strEcran.append(*it);
+      m_strEcran.append("\n\r");
+    } else {
+      unsigned int uiIndexStr = 0;
+      while (uiIndexStr < it->size()) {
+        m_strEcran.append(it->substr(uiIndexStr, m_uiWidthMax));
+        uiIndexStr = uiIndexStr + m_uiWidthMax;
+        m_strEcran.append("\n\r");
+      }
+    }
   }
-  for (uiIndex = 0; uiIndex < uiIndexMax; ++uiIndex) {
-    if (uiIndex < uiIndexMaxNav) {
-      if (uiMaxLengthNav < m_vNav[uiIndex].size()) {
-        uiMaxLengthNav = m_vNav[uiIndex].size();
-      }
-      if (m_vNav[uiIndex].size() < m_uiWidthNavMax) {
-        m_strEcran.append(m_vNav[uiIndex]);
-      } else {
-      }
+}
 
-    } else {
-      for (unsigned int i = 0; i < uiMaxLengthNav; ++i) {
-        m_strEcran.append(" ");
-      }
+void InterfaceCmd::PrintLoadingBar() {
+  std::map<std::string, unsigned int> mListBar = m_DataPrint.GetLoadingBar();
+  for (std::map<std::string, unsigned int>::iterator it = mListBar.begin();
+       it != mListBar.end(); ++it) {
+    m_strEcran.append(it->first);
+    m_strEcran.append("\n\r");
+    unsigned int uivalue = it->second;
+    if (uivalue < 0) {
+      uivalue = 0;
     }
-    m_strEcran.append(" # ");
-    if (uiIndex < uiIndexMaxArticle) {
-    } else {
+    if (uivalue >= 100) {
+      uivalue = 99;
     }
+    unsigned int uiNbrLoad;
+    unsigned int uiFilling;
+    m_strEcran.append("|");
+    if (uivalue == 0) {
+      uiFilling = m_uiWidthMax - 2;
+      uiNbrLoad = 0;
+    } else {
+      uiNbrLoad = (uivalue * m_uiWidthMax - 2) / 100;
+      uiFilling = m_uiWidthMax - uiNbrLoad - 2;
+    }
+    for (unsigned int i = 0; i < uiNbrLoad; ++i) {
+      m_strEcran.append("=");
+    }
+    for (unsigned int i = 0; i < uiFilling; ++i) {
+      m_strEcran.append("-");
+    }
+    m_strEcran.append("|");
+    m_strEcran.append("\n\r");
   }
 }
 
 void InterfaceCmd::PrintFooter() {
   for (std::vector<std::string>::iterator it = m_vFooter.begin();
        it != m_vFooter.end(); ++it) {
-    m_strEcran.append(*it);
-    m_strEcran.append("\n\r");
+    if (it->size() < m_uiWidthMax) {
+      m_strEcran.append(*it);
+      m_strEcran.append("\n\r");
+    } else {
+      unsigned int uiIndexStr = 0;
+      while (uiIndexStr < it->size()) {
+        m_strEcran.append(it->substr(uiIndexStr, m_uiWidthMax));
+        uiIndexStr = uiIndexStr + m_uiWidthMax;
+        m_strEcran.append("\n\r");
+      }
+    }
   }
 }
 

@@ -11,9 +11,9 @@
 #ifndef HEADER_DTODATAPRINT_H_
 #define HEADER_DTODATAPRINT_H_
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
 
 class DTODataPrint {
  private:
@@ -28,6 +28,8 @@ class DTODataPrint {
 
   std::vector<std::string> m_vFooter;
   std::map<std::string, std::string> m_mFooterValue;
+
+  std::map<std::string, unsigned int> m_mListLoadingBar;
 
  public:
   DTODataPrint();
@@ -52,16 +54,19 @@ class DTODataPrint {
   void SetArticleValue(std::string strKey, std::string strValue);
   void SetNavValue(std::string strKey, std::string strValue);
   void SetFooterValue(std::string strKey, std::string strValue);
+  void SetLoadingBar(std::string strKey, unsigned int uiValue);
 
   std::map<std::string, std::string> GetHeaderValue();
   std::map<std::string, std::string> GetArticleValue();
   std::map<std::string, std::string> GetNavValue();
   std::map<std::string, std::string> GetFooterValue();
+  std::map<std::string, unsigned int> GetLoadingBar();
 
   void ClearHeaderValue();
   void ClearArticleValue();
   void CleartNavValue();
   void ClearFooterValue();
+  void ClearLoadingBar();
 };
 
 #endif  // HEADER_DTODATAPRINT_H_
