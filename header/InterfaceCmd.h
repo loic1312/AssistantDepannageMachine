@@ -32,6 +32,7 @@ class InterfaceCmd {
   std::mutex m_mtxScanKeyboard;
   std::function<void(std::string)> m_callbackKeyboardInput;
   std::thread m_thScanKeyboard;
+  std::thread m_tPrintMenuLoading;
   bool m_bScanKeyboard;
 
   unsigned int m_uiWidthMax;
@@ -50,6 +51,8 @@ class InterfaceCmd {
 
   bool m_bLoadingBarActivate;
 
+  bool m_bLoadingActivate;
+
   bool SafeGetValueScanKeyboard();
 
   void InsertValueInMsg();
@@ -60,6 +63,8 @@ class InterfaceCmd {
   void PrintFooter();
   void PrintSeparator();
   void PrintLoadingBar();
+
+  void PrintMenuLoading();
 
  public:
   InterfaceCmd();
@@ -83,6 +88,7 @@ class InterfaceCmd {
   void setKeyValueStart(std::string strKeyValueStart);
   void setKeyValueStop(std::string strKeyValueStop);
   void setLoadingBarActivate(bool bLoadingBarActivate);
+  void setLoadingActivate(bool bLoadingActivate);
 };
 
 #endif  // HEADER_INTERFACECMD_H_

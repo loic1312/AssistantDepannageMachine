@@ -22,6 +22,60 @@ void InterfaceCmd::PrintScreen(DTODataPrint DataPrint) {
   PrintSeparator();
   std::system("clear");
   std::cout << m_strEcran << std::endl;
+  if (m_bLoadingActivate) {
+    m_tPrintMenuLoading =
+        std::thread(std::bind(&InterfaceCmd::PrintMenuLoading, this));
+  }
+}
+
+void InterfaceCmd::PrintMenuLoading() {
+  unsigned int uiLengthBar = m_uiWidthMax / 10;
+  unsigned int uiStartBar = 0;
+  bool bIsRigth = true;
+  std::string strBar;
+  for (unsigned int i = uiStartBar; i < uiLengthBar; ++i) {
+      strBar.append("=");
+    }
+  while (m_bLoadingActivate) {
+    std::lock_guard<std::mutex> lock(m_mtxDisplay);
+    m_strEcran.clear();
+    InsertValueInMsg();
+    PrintHeader();
+    PrintSeparator();
+    PrintNav();
+    PrintSeparator();
+    PrintArticle();
+    m_strEcran.append("|");
+    unsigned int uiLimit = uiStartBar + uiLengthBar;
+    if (uiLimit >= m_uiWidthMax - 1) {
+      uiLimit = m_uiWidthMax;
+      bIsRigth = false;
+      uiStartBar = m_uiWidthMax - uiLengthBar - 2;
+    }
+    if (uiStartBar == 0) {
+      bIsRigth = true;
+    }
+    for (unsigned int i = 0; i < uiStartBar; ++i) {
+      m_strEcran.append("-");
+    }
+    m_strEcran.append(strBar);
+    for (unsigned int i = uiLimit; i < m_uiWidthMax - 2; ++i) {
+      m_strEcran.append("-");
+    }
+    m_strEcran.append("|");
+    m_strEcran.append("\n\r");
+    PrintSeparator();
+    PrintFooter();
+    PrintSeparator();
+    std::system("clear");
+    std::cout << m_strEcran << std::endl;
+    if (bIsRigth) {
+      uiStartBar += 1;
+    } else {
+      uiStartBar -= 1;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+  }
 }
 
 void InterfaceCmd::StartScanKeyboard() {
@@ -45,6 +99,7 @@ void InterfaceCmd::KeyboardInput() {
             std::async(std::bind(&InterfaceCmd::ScanInputValueKeyboard, this));
       }
     }
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
   }
 }
 
@@ -84,6 +139,10 @@ void InterfaceCmd::setKeyValueStop(std::string strKeyValueStop) {
 
 void InterfaceCmd::setLoadingBarActivate(bool bLoadingBarActivate) {
   m_bLoadingBarActivate = bLoadingBarActivate;
+}
+
+void InterfaceCmd::setLoadingActivate(bool bLoadingActivate) {
+  m_bLoadingActivate = bLoadingActivate;
 }
 
 bool InterfaceCmd::SafeGetValueScanKeyboard() {

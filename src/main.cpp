@@ -1,6 +1,8 @@
 #include <unistd.h>
 
+#include <chrono>
 #include <iostream>
+#include <thread>
 
 #include "DTODataPrint.h"
 #include "InterfaceCmd.h"
@@ -10,11 +12,66 @@ DTODataPrint dp;
 InterfaceCmd ic;
 void callback(std::string data) {
   if (data == "STOP") {
+    std::vector<std::string> article;
+    article.push_back("Programe de test, termine");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
     bRun = false;
   } else if (data == "Print") {
+    std::vector<std::string> article;
+    article.push_back("Programe de test, tapez les commandes ci-dessus");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
+  } else if (data == "Loading") {
+    unsigned int uiCpt = 0;
+    ic.setLoadingActivate(true);
+    std::vector<std::string> article;
+    article.push_back("Calcul en cours...");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
+    while (uiCpt < 5) {
+      uiCpt += 1;
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+    }
+    ic.setLoadingActivate(false);
+    article.clear();
+    article.push_back("Programe de test, tapez les commandes ci-dessus");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
+  } else if (data == "UpLoad") {
+    unsigned int loading1 = 0;
+    unsigned int loading2 = 0;
+    dp.SetLoadingBar("1", 0);
+    dp.SetLoadingBar("2", 0);
+    ic.setLoadingBarActivate(true);
+    std::vector<std::string> article;
+    article.push_back("Telechargment en cour...");
+    dp.SetArticle(article);
+    while (loading1 < 100 || loading2 < 100) {
+      loading1 += 1;
+      loading2 += 2;
+      if (loading1 > 100) {
+        loading1 = 100;
+      }
+      if (loading2 > 100) {
+        loading2 = 100;
+      }
+      dp.SetLoadingBar("1", loading1);
+      dp.SetLoadingBar("2", loading2);
+      ic.PrintScreen(dp);
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    ic.setLoadingBarActivate(false);
+    article.clear();
+    article.push_back("Programe de test, tapez les commandes ci-dessus");
+    dp.SetArticle(article);
     ic.PrintScreen(dp);
   } else {
-    std::cout << data << std::endl;
+    std::vector<std::string> article;
+    article.push_back("Programe de test, tapez les commandes ci-dessus");
+    article.push_back("Command inconnue");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
   }
 }
 
@@ -27,6 +84,8 @@ int main(int argc, char const *argv[]) {
   std::vector<std::string> nav;
   nav.push_back("STOP");
   nav.push_back("Print");
+  nav.push_back("Loading");
+  nav.push_back("UpLoad");
   dp.SetNav(nav);
   std::vector<std::string> article;
   article.push_back("Programe de test, tapez les commandes ci-dessus");
@@ -37,29 +96,13 @@ int main(int argc, char const *argv[]) {
   ic.setCallbackKeyboardInput(std::bind(callback, std::placeholders::_1));
   ic.setScanKeyboard(true);
   ic.StartScanKeyboard();
-  dp.SetLoadingBar("1", 0);
-  dp.SetLoadingBar("2", 0);
-  ic.setLoadingBarActivate(true);
   ic.setWidthMax(100);
   ic.setBbrNav(4);
   ic.setKeyStop("STOP");
   ic.setKeyValueStart("<!");
   ic.setKeyValueStop("!>");
   ic.PrintScreen(dp);
-  unsigned int loading1 = 0;
-  unsigned int loading2 = 0;
   while (bRun) {
-    loading1 += 1;
-    loading2 += 2;
-    if (loading1 > 100) {
-      loading1 = 0;
-    }
-    if (loading2 > 100) {
-      loading2 = 0;
-    }
-    dp.SetLoadingBar("1", loading1);
-    dp.SetLoadingBar("2", loading2);
-    ic.PrintScreen(dp);
     sleep(1);
   }
   ic.setScanKeyboard(false);
