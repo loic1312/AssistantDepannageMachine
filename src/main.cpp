@@ -66,6 +66,26 @@ void callback(std::string data) {
     article.push_back("Programe de test, tapez les commandes ci-dessus");
     dp.SetArticle(article);
     ic.PrintScreen(dp);
+  } else if (data == "Graph") {
+    float fx = -10;
+    float fy = -15;
+    for (unsigned int i = 0; i <= 40; ++i) {
+      dp.SetPointGraphic(fx, fy);
+      fx = fx + 0.5;
+      fy = fy + 0.5;
+    }
+    std::vector<std::string> article;
+    article.push_back("Une courbe:");
+    dp.SetArticle(article);
+    ic.setPrintGraphic(true);
+    ic.setHeigthGraph(10);
+    ic.PrintScreen(dp);
+    ic.setPrintGraphic(false);
+  } else if (data == "Table") {
+    std::vector<std::string> article;
+    article.push_back("En chantier");
+    dp.SetArticle(article);
+    ic.PrintScreen(dp);
   } else {
     std::vector<std::string> article;
     article.push_back("Programe de test, tapez les commandes ci-dessus");
@@ -86,6 +106,11 @@ int main(int argc, char const *argv[]) {
   nav.push_back("Print");
   nav.push_back("Loading");
   nav.push_back("UpLoad");
+  nav.push_back("Graph");
+  nav.push_back("Table");
+  std::map<float, float> mGraph;
+  float ymin = -10;
+  float ymax = 10;
   dp.SetNav(nav);
   std::vector<std::string> article;
   article.push_back("Programe de test, tapez les commandes ci-dessus");
@@ -96,7 +121,7 @@ int main(int argc, char const *argv[]) {
   ic.setCallbackKeyboardInput(std::bind(callback, std::placeholders::_1));
   ic.setScanKeyboard(true);
   ic.StartScanKeyboard();
-  ic.setWidthMax(100);
+  ic.setWidthMax(50);
   ic.setBbrNav(4);
   ic.setKeyStop("STOP");
   ic.setKeyValueStart("<!");

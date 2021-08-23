@@ -54,6 +54,8 @@ void DTODataPrint::SetLoadingBar(std::string strKey, unsigned int uiValue) {
   m_mListLoadingBar[strKey] = uiValue;
 }
 
+void DTODataPrint::SetPointGraphic(float fX, float fY) { m_mGraphic[fX] = fY; }
+
 std::map<std::string, std::string> DTODataPrint::GetHeaderValue() {
   return m_mHeaderValue;
 }
@@ -74,6 +76,8 @@ std::map<std::string, unsigned int> DTODataPrint::GetLoadingBar() {
   return m_mListLoadingBar;
 }
 
+std::map<float, float> DTODataPrint::GetGraphic() { return m_mGraphic; }
+
 void DTODataPrint::ClearHeaderValue() { m_mHeaderValue.clear(); }
 
 void DTODataPrint::ClearArticleValue() { m_mArticleValue.clear(); }
@@ -83,3 +87,5 @@ void DTODataPrint::CleartNavValue() { m_mNavValue.clear(); }
 void DTODataPrint::ClearFooterValue() { m_mFooterValue.clear(); }
 
 void DTODataPrint::ClearLoadingBar() { m_mListLoadingBar.clear(); }
+
+void DTODataPrint::ClearGraphic() { m_mGraphic.clear(); }

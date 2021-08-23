@@ -31,6 +31,8 @@ class DTODataPrint {
 
   std::map<std::string, unsigned int> m_mListLoadingBar;
 
+  std::map<float, float> m_mGraphic;
+
  public:
   DTODataPrint();
   ~DTODataPrint();
@@ -55,18 +57,21 @@ class DTODataPrint {
   void SetNavValue(std::string strKey, std::string strValue);
   void SetFooterValue(std::string strKey, std::string strValue);
   void SetLoadingBar(std::string strKey, unsigned int uiValue);
+  void SetPointGraphic(float fX, float fY);
 
   std::map<std::string, std::string> GetHeaderValue();
   std::map<std::string, std::string> GetArticleValue();
   std::map<std::string, std::string> GetNavValue();
   std::map<std::string, std::string> GetFooterValue();
   std::map<std::string, unsigned int> GetLoadingBar();
+  std::map<float, float> GetGraphic();
 
   void ClearHeaderValue();
   void ClearArticleValue();
   void CleartNavValue();
   void ClearFooterValue();
   void ClearLoadingBar();
+  void ClearGraphic();
 };
 
 #endif  // HEADER_DTODATAPRINT_H_

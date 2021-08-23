@@ -22,6 +22,8 @@
 #include <string>
 #include <thread>
 #include <vector>
+#include <sstream>
+#include <iomanip>
 
 #include "DTODataPrint.h"
 
@@ -37,6 +39,7 @@ class InterfaceCmd {
 
   unsigned int m_uiWidthMax;
   unsigned int m_uiBbrNav;
+  unsigned int m_uiHeigthGraph;
 
   std::string m_strEcran;
 
@@ -50,12 +53,12 @@ class InterfaceCmd {
   std::string m_strKeyValueStop;
 
   bool m_bLoadingBarActivate;
-
   bool m_bLoadingActivate;
+  bool m_bPrintGraphic;
 
   bool SafeGetValueScanKeyboard();
-
   void InsertValueInMsg();
+  std::string FloatToString(float fValue, unsigned int uiPrecision);
 
   void PrintHeader();
   void PrintNav();
@@ -63,6 +66,7 @@ class InterfaceCmd {
   void PrintFooter();
   void PrintSeparator();
   void PrintLoadingBar();
+  void PrintGraphic();
 
   void PrintMenuLoading();
 
@@ -89,6 +93,8 @@ class InterfaceCmd {
   void setKeyValueStop(std::string strKeyValueStop);
   void setLoadingBarActivate(bool bLoadingBarActivate);
   void setLoadingActivate(bool bLoadingActivate);
+  void setPrintGraphic(bool bPrintGraphic);
+  void setHeigthGraph(unsigned int uiHeigth);
 };
 
 #endif  // HEADER_INTERFACECMD_H_
