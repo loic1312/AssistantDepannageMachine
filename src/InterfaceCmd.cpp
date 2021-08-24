@@ -338,46 +338,39 @@ void InterfaceCmd::PrintGraphic() {
       fYMax = it->second;
     }
   }
-  float fXScale = (fXMax - fXMin) / m_uiWidthMax - 1;
-  float fYScale = (fYMax - fYMin) / m_uiHeigthGraph - 1;
-
-  std::string strGraph[m_uiHeigthGraph][m_uiWidthMax];
-
-  for (unsigned int x = 0; x < m_uiHeigthGraph; ++x) {
-    for (unsigned int y = 0; y < m_uiWidthMax; ++y) {
-      strGraph[x][y] = "-";
+  std::vector<std::string> vGraph;
+  for (unsigned int y = 0; y < m_uiHeigthGraph; ++y) {
+    std::string strLine;
+    for (unsigned int x = 0; x < m_uiWidthMax; ++x) {
+      strLine.append(" ");
     }
+    vGraph.push_back(strLine);
   }
-
+  unsigned uiXZero = (m_uiWidthMax - 1) * ((0 - fXMin) / (fXMax - fXMin));
+  unsigned uiYZero = (m_uiHeigthGraph - 1) * ((0 - fYMin) / (fYMax - fYMin));
+  for (std::vector<std::string>::iterator it = vGraph.end() - 1;
+       it != vGraph.begin(); --it) {
+    it[uiXZero] = '#';
+  }
+  vGraph[uiYZero].clear();
+  for (unsigned int i = 0; i < m_uiWidthMax; ++i) {
+    vGraph[uiYZero].append("#");
+  }
   for (std::map<float, float>::iterator it = mGraphic.begin();
        it != mGraphic.end(); ++it) {
-    unsigned int x = (it->first * fXScale) + std::abs(fXMin);
-    unsigned int y = (it->second * fYScale) + std::abs(fYMin);
-    if (x < m_uiHeigthGraph && y < m_uiWidthMax) {
-      strGraph[x][y] = "x";
-    }
+    float fXScale = (it->first - fXMin) / (fXMax - fXMin);
+    float fYScale = (it->second - fYMin) / (fYMax - fYMin);
+    unsigned int uiX = (m_uiWidthMax - 1) * fXScale;
+    unsigned int uiY = (m_uiHeigthGraph - 1) * fYScale;
+    vGraph[uiY][uiX] = 'x';
   }
-
-  for (unsigned int x = 0; x < m_uiHeigthGraph; ++x) {
-    for (unsigned int y = 0; y < m_uiWidthMax; ++y) {
-      m_strEcran.append(strGraph[x][y]);
-    }
+  for (std::vector<std::string>::iterator it = vGraph.end() - 1;
+       it != vGraph.begin(); --it) {
+    m_strEcran.append(*it);
     m_strEcran.append("\n\r");
   }
+  m_strEcran.append(vGraph[0]);
   m_strEcran.append("\n\r");
-
-  // m_strEcran.append(FloatToString(fXMin, 2));
-  // m_strEcran.append("/");
-  // m_strEcran.append(FloatToString(fXMax, 2));
-  // m_strEcran.append("\n\r");
-  // m_strEcran.append(FloatToString(fYMin, 2));
-  // m_strEcran.append("/");
-  // m_strEcran.append(FloatToString(fYMax, 2));
-  // m_strEcran.append("\n\r");
-  // m_strEcran.append(FloatToString(fXScale, 2));
-  // m_strEcran.append("/");
-  // m_strEcran.append(FloatToString(fYScale, 2));
-  // m_strEcran.append("\n\r");
 }
 
 void InterfaceCmd::PrintFooter() {
