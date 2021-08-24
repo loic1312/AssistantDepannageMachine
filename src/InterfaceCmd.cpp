@@ -348,9 +348,10 @@ void InterfaceCmd::PrintGraphic() {
   }
   unsigned uiXZero = (m_uiWidthMax - 1) * ((0 - fXMin) / (fXMax - fXMin));
   unsigned uiYZero = (m_uiHeigthGraph - 1) * ((0 - fYMin) / (fYMax - fYMin));
-  for (std::vector<std::string>::iterator it = vGraph.end() - 1;
-       it != vGraph.begin(); --it) {
-    it[uiXZero] = '#';
+  for (std::vector<std::string>::iterator it = vGraph.begin();
+       it != vGraph.end(); ++it) {
+    it->insert(uiXZero, "#");
+    it->pop_back();
   }
   vGraph[uiYZero].clear();
   for (unsigned int i = 0; i < m_uiWidthMax; ++i) {

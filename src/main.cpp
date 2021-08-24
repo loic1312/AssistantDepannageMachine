@@ -78,7 +78,7 @@ void callback(std::string data) {
     article.push_back("Une courbe:");
     dp.SetArticle(article);
     ic.setPrintGraphic(true);
-    ic.setHeigthGraph(10);
+    ic.setHeigthGraph(15);
     ic.PrintScreen(dp);
     ic.setPrintGraphic(false);
   } else if (data == "Table") {
@@ -121,7 +121,7 @@ int main(int argc, char const *argv[]) {
   ic.setCallbackKeyboardInput(std::bind(callback, std::placeholders::_1));
   ic.setScanKeyboard(true);
   ic.StartScanKeyboard();
-  ic.setWidthMax(50);
+  ic.setWidthMax(100);
   ic.setBbrNav(4);
   ic.setKeyStop("STOP");
   ic.setKeyValueStart("<!");
