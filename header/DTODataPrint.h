@@ -32,6 +32,9 @@ class DTODataPrint {
   std::map<std::string, unsigned int> m_mListLoadingBar;
 
   std::map<float, float> m_mGraphic;
+  std::vector<std::string> m_vHeaderTable;
+  std::vector<std::vector<std::string>> m_vDataTable;
+  std::vector<std::string> m_vHeaderLineTable;
 
  public:
   DTODataPrint();
@@ -58,6 +61,10 @@ class DTODataPrint {
   void SetFooterValue(std::string strKey, std::string strValue);
   void SetLoadingBar(std::string strKey, unsigned int uiValue);
   void SetPointGraphic(float fX, float fY);
+  // Chnager le format de données, ici pas de gestion des line correct
+  void setHeaderTable(std::vector<std::string> vHeaderTable);
+  void setDataTable(std::vector<std::vector<std::string>> vDataTable);
+  void setHeaderLineTable(std::vector<std::string> vHeaderLineTable);
 
   std::map<std::string, std::string> GetHeaderValue();
   std::map<std::string, std::string> GetArticleValue();
@@ -65,6 +72,9 @@ class DTODataPrint {
   std::map<std::string, std::string> GetFooterValue();
   std::map<std::string, unsigned int> GetLoadingBar();
   std::map<float, float> GetGraphic();
+  std::vector<std::string> GetHeaderTable();
+  std::vector<std::vector<std::string>> GetDataTable();
+  std::vector<std::string> GetHeaderLineTable();
 
   void ClearHeaderValue();
   void ClearArticleValue();

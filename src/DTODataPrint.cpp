@@ -56,6 +56,19 @@ void DTODataPrint::SetLoadingBar(std::string strKey, unsigned int uiValue) {
 
 void DTODataPrint::SetPointGraphic(float fX, float fY) { m_mGraphic[fX] = fY; }
 
+void DTODataPrint::setHeaderTable(std::vector<std::string> vHeaderTable) {
+  m_vHeaderTable = vHeaderTable;
+}
+
+void DTODataPrint::setDataTable(std::vector<std::vector<std::string>> vDataTable) {
+  m_vDataTable = vDataTable;
+}
+
+void DTODataPrint::setHeaderLineTable(
+    std::vector<std::string> vHeaderLineTable) {
+  m_vHeaderLineTable = vHeaderLineTable;
+}
+
 std::map<std::string, std::string> DTODataPrint::GetHeaderValue() {
   return m_mHeaderValue;
 }
@@ -77,6 +90,18 @@ std::map<std::string, unsigned int> DTODataPrint::GetLoadingBar() {
 }
 
 std::map<float, float> DTODataPrint::GetGraphic() { return m_mGraphic; }
+
+std::vector<std::string> DTODataPrint::GetHeaderTable() {
+  return m_vHeaderTable;
+}
+
+std::vector<std::vector<std::string>> DTODataPrint::GetDataTable() {
+  return m_vDataTable;
+}
+
+std::vector<std::string> DTODataPrint::GetHeaderLineTable() {
+  return m_vHeaderLineTable;
+}
 
 void DTODataPrint::ClearHeaderValue() { m_mHeaderValue.clear(); }
 

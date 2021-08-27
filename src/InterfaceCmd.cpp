@@ -17,6 +17,9 @@ void InterfaceCmd::PrintScreen(DTODataPrint DataPrint) {
   if (m_bPrintGraphic) {
     PrintGraphic();
   }
+  if (m_bPrintTable) {
+    PrintTable();
+  }
   if (m_bLoadingBarActivate) {
     PrintLoadingBar();
   }
@@ -162,6 +165,14 @@ void InterfaceCmd::setHeigthGraph(unsigned int uiHeigth) {
 bool InterfaceCmd::SafeGetValueScanKeyboard() {
   std::lock_guard<std::mutex> lock(m_mtxScanKeyboard);
   return m_bScanKeyboard;
+}
+
+void InterfaceCmd::setPrintTable(bool bPrintTable) {
+  m_bPrintTable = bPrintTable;
+}
+
+void InterfaceCmd::setWidthCellTable(unsigned int uiWidthCellTable) {
+  m_uiWidthCellTable = uiWidthCellTable;
 }
 
 void InterfaceCmd::InsertValueInMsg() {
@@ -371,6 +382,89 @@ void InterfaceCmd::PrintGraphic() {
     m_strEcran.append("\n\r");
   }
   m_strEcran.append(vGraph[0]);
+  m_strEcran.append("\n\r");
+}
+
+void InterfaceCmd::PrintTable() {
+  std::vector<std::string> vHeader = m_DataPrint.GetHeaderTable();
+  std::vector<std::vector<std::string>> vData = m_DataPrint.GetDataTable();
+  std::vector<std::string> vHeaderLine = m_DataPrint.GetHeaderLineTable();
+  unsigned int uiNbrCellMaxPrint = m_uiWidthMax / m_uiWidthCellTable;
+  if (vHeaderLine.size() != 0) {
+    for (unsigned int i = 0; i < m_uiWidthCellTable - 1; ++i) {
+      m_strEcran.append("\\");
+    }
+    m_strEcran.append("|");
+    uiNbrCellMaxPrint = uiNbrCellMaxPrint - 1;
+  }
+  if (uiNbrCellMaxPrint > vHeader.size()) {
+    uiNbrCellMaxPrint = vHeader.size();
+  }
+  for (unsigned int uiCell = 0; uiCell < uiNbrCellMaxPrint; ++uiCell) {
+    if (vHeader[uiCell].size() < m_uiWidthCellTable - 1) {
+      m_strEcran.append(vHeader[uiCell]);
+      for (unsigned int i = vHeader[uiCell].size(); i < m_uiWidthCellTable - 1;
+           ++i) {
+        m_strEcran.append(" ");
+      }
+    } else {
+      m_strEcran.append(vHeader[uiCell].substr(0, m_uiWidthCellTable - 1));
+    }
+    m_strEcran.append("|");
+  }
+  m_strEcran.append("\n\r");
+  for (unsigned int uiCell = 0; uiCell < uiNbrCellMaxPrint; ++uiCell) {
+    for (unsigned int i = 0; i < m_uiWidthCellTable; ++i) {
+      m_strEcran.append("-");
+    }
+  }
+  if (vHeaderLine.size() != 0) {
+    for (unsigned int i = 0; i < m_uiWidthCellTable; ++i) {
+      m_strEcran.append("-");
+    }
+  }
+  m_strEcran.append("\n\r");
+  unsigned int uiNLine = 0;
+  for (unsigned int uiCell = 0; uiCell < uiNbrCellMaxPrint; ++uiCell) {
+    if (vHeaderLine.size() != 0) {
+      if (vHeaderLine[uiCell].size() < m_uiWidthCellTable - 1) {
+        m_strEcran.append(vHeaderLine[uiCell]);
+        for (unsigned int i = vHeaderLine[uiCell].size();
+             i < m_uiWidthCellTable - 1; ++i) {
+          m_strEcran.append(" ");
+        }
+      } else {
+        m_strEcran.append(
+            vHeaderLine[uiCell].substr(0, m_uiWidthCellTable - 1));
+      }
+      m_strEcran.append("|");
+    }
+    for (std::vector<std::string>::iterator its = vData[uiNLine].begin();
+         its != vData[uiNLine].end(); ++its) {
+      if (its->size() < m_uiWidthCellTable - 1) {
+        m_strEcran.append(*its);
+        for (unsigned int i = its->size(); i < m_uiWidthCellTable - 1; ++i) {
+          m_strEcran.append(" ");
+        }
+      } else {
+        m_strEcran.append(its->substr(0, m_uiWidthCellTable - 1));
+      }
+      m_strEcran.append("|");
+    }
+    uiNLine += 1;
+    m_strEcran.append("\n\r");
+    for (unsigned int uiCell = 0; uiCell < uiNbrCellMaxPrint; ++uiCell) {
+      for (unsigned int i = 0; i < m_uiWidthCellTable; ++i) {
+        m_strEcran.append("-");
+      }
+    }
+    if (vHeaderLine.size() != 0) {
+      for (unsigned int i = 0; i < m_uiWidthCellTable; ++i) {
+        m_strEcran.append("-");
+      }
+    }
+    m_strEcran.append("\n\r");
+  }
   m_strEcran.append("\n\r");
 }
 

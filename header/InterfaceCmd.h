@@ -41,6 +41,8 @@ class InterfaceCmd {
   unsigned int m_uiBbrNav;
   unsigned int m_uiHeigthGraph;
 
+  unsigned int m_uiWidthCellTable;
+
   std::string m_strEcran;
 
   std::vector<std::string> m_vHeader;
@@ -55,6 +57,7 @@ class InterfaceCmd {
   bool m_bLoadingBarActivate;
   bool m_bLoadingActivate;
   bool m_bPrintGraphic;
+  bool m_bPrintTable;
 
   bool SafeGetValueScanKeyboard();
   void InsertValueInMsg();
@@ -67,6 +70,7 @@ class InterfaceCmd {
   void PrintSeparator();
   void PrintLoadingBar();
   void PrintGraphic();
+  void PrintTable();
 
   void PrintMenuLoading();
 
@@ -95,6 +99,8 @@ class InterfaceCmd {
   void setLoadingActivate(bool bLoadingActivate);
   void setPrintGraphic(bool bPrintGraphic);
   void setHeigthGraph(unsigned int uiHeigth);
+  void setPrintTable(bool bPrintTable);
+  void setWidthCellTable(unsigned int uiWidthCellTable);
 };
 
 #endif  // HEADER_INTERFACECMD_H_

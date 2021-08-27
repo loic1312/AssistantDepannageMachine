@@ -82,10 +82,33 @@ void callback(std::string data) {
     ic.PrintScreen(dp);
     ic.setPrintGraphic(false);
   } else if (data == "Table") {
+    std::vector<std::string> h;
+    h.push_back("C1");
+    h.push_back("C2");
+    h.push_back("C3");
+    dp.setHeaderTable(h);
+    std::vector<std::string> hl;
+    hl.push_back("L1");
+    hl.push_back("L2");
+    hl.push_back("L3");
+    dp.setHeaderLineTable(hl);
+    std::vector<std::vector<std::string>> d;
+    std::vector<std::string> l;
+    for (unsigned int i = 0; i < 3; ++i) {
+      l.clear();
+      for (unsigned int j = 0; j < 3; ++j) {
+        l.push_back(std::to_string(i) + "." + std::to_string(j));
+      }
+      d.push_back(l);
+    }
+    dp.setDataTable(d);
+    ic.setWidthCellTable(10);
+    ic.setPrintTable(true);
     std::vector<std::string> article;
-    article.push_back("En chantier");
+    article.push_back("Tableau:");
     dp.SetArticle(article);
     ic.PrintScreen(dp);
+    ic.setPrintTable(false);
   } else {
     std::vector<std::string> article;
     article.push_back("Programe de test, tapez les commandes ci-dessus");
