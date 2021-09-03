@@ -1,0 +1,22 @@
+Objectifs:
+Etablire une machine expert pour le dépannage des machines lors d'un appel d'un technicien
+Pouvoir rendre la machine disponible au tech sur le terrrain
+
+Les faits:
+Les faits seront boollean, il correspond a une réponse oui ou non d'un technicien
+
+Les régles:
+Les régles déterminerons les faits déductible des faits apporter par le tech et les actions a mener par le tech pour résoudre la panne
+
+Le moteur d'inference:
+Le mateur sera en chainage avant car il doit s'appuier sur le faits du tech
+
+Liste des faits:
+->1:Connexion bud oui/non question:oui
+->2:Configuration bud oui/non question:oui
+->3:Machine distribu oui/non question:oui
+->4:L'appli mobile fonctionne oui/non question:oui
+->5:C'est un bud V1 oui/non question:oui
+
+Liste des régles:
+->Si 1:non et alors
