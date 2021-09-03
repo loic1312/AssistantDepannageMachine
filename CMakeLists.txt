@@ -17,11 +17,13 @@ set(SOURCES
 	src/main.cpp
 	src/InterfaceCmd.cpp
 	src/DTODataPrint.cpp
+	src/Fact.cpp
 	)
 	
 set(HEADERS
 	header/InterfaceCmd.h
 	header/DTODataPrint.h
+	header/Fact.h
 	)
 	
 set(Libraries_FOUND True)

@@ -17,6 +17,9 @@ Liste des faits:
 ->3:Machine distribu oui/non question:oui
 ->4:L'appli mobile fonctionne oui/non question:oui
 ->5:C'est un bud V1 oui/non question:oui
+->6:C'est un bud oui/non question:oui
+->7:C'est une barista oui/non question:oui
+
 
 Liste des régles:
 ->Si 1:non et alors
