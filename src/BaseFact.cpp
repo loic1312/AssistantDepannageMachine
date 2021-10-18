@@ -17,6 +17,7 @@ Fact BaseFact::GetFact(std::string strNameFact) {
       return *it;
     }
   }
+  return Fact("NONE", 0, "NONE", "NONE", "NONE");
 }
 
 std::string BaseFact::GetValueFact(std::string strNameFact) {

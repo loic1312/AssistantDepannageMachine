@@ -7,6 +7,7 @@
 #include "Rule.h"
 #include "RuleFactory.h"
 #include "DriverXml.h"
+#include "IHMCmd.h"
 
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
@@ -16,7 +17,11 @@ class SteamInference {
  private:
   BaseRule m_BaseRule;
   BaseFact m_BaseFact;
+  IHMCmd m_IHMCmd;
   int m_iLevelMax;
+
+  int IsRevelant(Rule rRule);
+  Rule FindRule();
 
  public:
   SteamInference();

@@ -36,6 +36,7 @@ set(SOURCES
 	src/SteamInference.cpp
 	src/RuleFactory.cpp
 	src/DriverXml.cpp
+	src/IHMCmd.cpp
 	)
 	
 set(HEADERS
@@ -48,6 +49,7 @@ set(HEADERS
 	header/SteamInference.h
 	header/RuleFactory.h
 	header/DriverXml.h
+	header/IHMCmd.h
 	)
 	
 set(Libraries_FOUND True)

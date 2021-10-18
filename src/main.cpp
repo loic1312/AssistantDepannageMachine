@@ -21,7 +21,7 @@ int main(int argc, char const *argv[]) {
     std::cout << "Assistant Depannage start" << std::endl;
     SteamInference si;
     si.InitRule(argv[1]);
-    std::cout << si.ToString() << std::endl;
+    si.Solve();
   } else {
     std::cout << "Usage: ./MachineExpertMaxiCoffee /path/rule.xml" << std::endl;
   }
