@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Rules>
+    <Rule>
+        <Name>R1</Name>
+        <Premisses>
+            <Premisse>
+                <Name>Ordre</Name>
+                <Issue>Quel est l'ordre?</Issue>
+                <Value>3</Value>
+                <Type>Int</Type>
+            </Premisse>
+        </Premisses>
+        <Conclusion>
+            <Name>Triangle</Name>
+            <Issue>None</Issue>
+            <Value>True</Value>
+            <Type>Bool</Type>
+        </Conclusion>
+    </Rule>
+    <Rule>
+        <Name>R2</Name>
+        <Premisses>
+            <Premisse>
+                <Name>Triangle</Name>
+                <Issue>None</Issue>
+                <Value>True</Value>
+                <Type>Bool</Type>
+            </Premisse>
+            <Premisse>
+                <Name>Angle droit</Name>
+                <Issue>La figure a-t-elle au moins un angle droit?</Issue>
+                <Value>True</Value>
+                <Type>Bool</Type>
+            </Premisse>
+        </Premisses>
+        <Conclusion>
+            <Name>Tirangle rectangle</Name>
+            <Issue>None</Issue>
+            <Value>True</Value>
+            <Type>Bool</Type>
+        </Conclusion>
+    </Rule>
+    <Rule>
+        <Name>R3</Name>
+        <Premisses>
+            <Premisse>
+                <Name>Triangle</Name>
+                <Issue>None</Issue>
+                <Value>True</Value>
+                <Type>Bool</Type>
+            </Premisse>
+            <Premisse>
+                <Name>Cotes egaux</Name>
+                <Issue>Conbien la figure a-t-elle de cotes egaux?</Issue>
+                <Value>2</Value>
+                <Type>int</Type>
+            </Premisse>
+        </Premisses>
+        <Conclusion>
+            <Name>Triangle isocele</Name>
+            <Issue>None</Issue>
+            <Value>True</Value>
+            <Type>Bool</Type>
+        </Conclusion>
+    </Rule>
+</Rules>

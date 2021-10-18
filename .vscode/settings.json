@@ -52,6 +52,7 @@
         "typeinfo": "cpp",
         "bit": "cpp",
         "map": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "*.tpp": "cpp"
     }
 }
